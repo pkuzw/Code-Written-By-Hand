@@ -7,31 +7,40 @@
 
 using namespace std;
 
-///@brief 进制转换，将一个10进制整数转换为d进制，d <= 10
+///@brief 进制转换，将一个10进制整数转换为d进制，d <= 16
 ///@param[in] n 整数n
 ///@param[in] d d进制
 ///@return 无
-void convert_base(int n, const int d)
+void convert_base(long long n, const int d)
 {
-	stack<int> s;
-	int e;
+	stack<char> s;
+	int e = 0;
+	char tmp = '0';
 
 	while(n != 0)
 	{
 		e = n % d;
-		s.push(e);
+		if (e >= 0 && e <= 9)
+		{
+			tmp = '0' + e;
+		}
+		else
+		{
+			tmp = 'A' + e - 10;
+		}
+		s.push(tmp);
 		n /= d;
 	}
 	while(!s.empty())
 	{
-		e = s.top();
+		tmp = s.top();
 		s.pop();
-		cout << e;
+		cout << tmp;
 	}
 	return;
 }
 
-///@brief 进制转换，将一个10进制的整数转换为d进制，d <= 10，更优化的版本
+///@brief 进制转换，将一个10进制的整数转换为d进制，d <= 16，更优化的版本
 /*		  如果可以预估栈的最大空间，则用数组来模拟栈。这是一个常用技巧。
 		  如果CPU为64位，则最大整数是2^64.由于数制最小为2，在2进制下最大数需要64位，即栈的最大长度。
 */
@@ -40,23 +49,32 @@ void convert_base(int n, const int d)
 ///@return 无
 
 #define MAX 64
-int stck[MAX];
+char stck[MAX];
 int top = -1;
 
-void convert_base2(int n, const int d)
+void convert_base2(long long n, const int d)
 {
 	int e;
+	char tmp = '0';
 
 	while(n != 0)
 	{
 		e = n % d;
-		stck[++top] = e;	//入栈
+		if (e >= 0 && e <= 9)
+		{
+			tmp = '0' + e;
+		}
+		else
+		{
+			tmp = 'A' + e - 10;
+		}
+		stck[++top] = tmp;	//入栈
 		n /= d;
 	}
 	while(top >= 0)
 	{
-		e = stck[top--];	//出栈
-		cout << e;
+		tmp = stck[top--];	//出栈
+		cout << tmp;
 	}
 	return;
 }
@@ -92,9 +110,10 @@ long long restore(const char s[MAX], const int d)
 }
 int main()
 {
-	int n = 0, d = 0;
+	long long n = 0;
+	int d = 0;
 	
-	cout << "Convert decimal number to d number. d <= 10" << endl;
+	cout << "Convert decimal number to d number. d <= 16" << endl;
 	cout << "input d: ";
 	cin >> d;
 	cout << "input n: ";
