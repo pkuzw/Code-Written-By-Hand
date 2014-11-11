@@ -6,6 +6,9 @@
 
 #include <cstdlib>	//for malloc(), free()
 #include <cstring>	//for memcpy()
+#include <iostream>	//for cin & cout
+
+using namespace std;
 
 #ifndef __cplusplus
 typedef char bool;
@@ -32,8 +35,8 @@ typedef struct queue_t
 ///@return 无
 void queue_init(queue_t* q, const int capacity)
 {
-	q->front = 0;
-	q->rear = 0;
+	q->front = 0;	//front是队列首元素的存放位置
+	q->rear = 0;	//rear是队列下一个元素要被加入的位置，应该始终保持为空
 	q->capacity = capacity;
 	q->elems = (queue_elem_t*)malloc(capacity * sizeof(queue_elem_t));
 }
@@ -116,7 +119,7 @@ queue_elem_t queue_front(const queue_t* q)
 ///@return 队尾元素
 queue_elem_t queue_rear(const queue_t* q)
 {
-	return q->elems[q->rear];
+	return q->elems[q->rear - 1];
 }
 
 ///@brief 弹出队首元素
@@ -127,7 +130,39 @@ void queue_pop(queue_t* q)
 	q->front = (q->front + 1) % q->capacity;
 	return;
 }
+
 int main()
 {
+	queue_t* q = new queue_t;
+	int cpcty = 0;
+	cout << "Input the capacity of queue: ";
+	cin >> cpcty;
+
+	queue_init(q, cpcty);
+
+	queue_elem_t x = 0;
+	cout << "Input the new node: ";
+	cin >> x;
+	queue_push(q, x);
+
+	queue_elem_t x1 = 0;
+	cout << "Input the new node: ";
+	cin >> x1;
+	queue_push(q, x1);
+
+	cout << "Output the size of the queue: ";
+	cout << queue_size(q) << endl;
+
+	cout << "Output the queue's front: ";
+	cout << queue_front(q) << endl;
+
+	cout << "Output the queue's rear: ";
+	cout << queue_rear(q) << endl;
+
+	cout << "After pop the front, output the new front: ";
+	queue_pop(q);
+	cout << queue_front(q) << endl;
+
+	queue_uninit(q);
 	return 0;
 }
