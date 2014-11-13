@@ -136,6 +136,79 @@ void in_order(const binary_tree_node_t* root, int (*visit)(void*))
 	}
 }
 
+///@brief 后序遍历，迭代版
+///@param[in] root 根节点
+///@param[in] visit 访问节点数据的函数指针
+///@return void
+void post_order(const binary_tree_node_t* root, int (*visit)(void*))
+{
+	const binary_tree_node_t* p = NULL;	//正在访问的节点
+	const binary_tree_node_t* q = NULL;	//刚刚访问过的节点
+	stack<const binary_tree_node_t*> s;
+
+	p = root;
+
+	do 
+	{
+		while(p != NULL)
+		{
+			s.push(p);
+			p = p->lchild;
+		}
+
+		q = NULL;
+
+		while(!s.empty())
+		{
+			p = s.top();
+			s.pop();
+
+			if(p->rchild == q)	//如果当前节点的右子节点不存在或刚被访问过，则访问当前节点
+			{
+				(void)visit(p->data);
+				q = p;
+			}
+			else	//如果当前节点不能访问，需要二次进栈
+			{
+				s.push(p);
+
+				p = p->rchild;	//先处理右子树
+				break;
+			}
+		}
+	}while(!s.empty());
+}
+
+///@brief 层次遍历，即宽度优先遍历(BFS)
+///@param[in] root 根节点
+///@param[in] visit 访问数据元素的函数指针
+///@return 无
+void level_order(const binary_tree_node_t* root, int (*visit)(void*))
+{
+	const binary_tree_node_t* p;
+	queue<const binary_tree_node_t*> q;
+
+	p = root;
+
+	if(p != NULL)
+	{
+		q.push(p);
+	}
+
+	while(!q.empty())
+	{
+		p = q.front();
+		q.pop();
+		(void)visit(p->data);
+
+		//先左后右或者先右后左皆可
+		if(p->lchild != NULL)
+			q.push(p->lchild);
+		if(p->rchild != NULL)
+			q.push(p->rchild);
+	}
+}
+
 int main()
 {
 	return 0;
