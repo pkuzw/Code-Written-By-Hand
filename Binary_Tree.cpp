@@ -140,6 +140,8 @@ void in_order(const binary_tree_node_t* root, int (*visit)(void*))
 ///@param[in] root 根节点
 ///@param[in] visit 访问节点数据的函数指针
 ///@return void
+///@note 后序遍历的要点在于节点数据在左右子树访问完毕后才会被访问，所以会先访问左子树，直到左子树不能访问后，再访问右子树，
+///		 最后才访问节点。
 void post_order(const binary_tree_node_t* root, int (*visit)(void*))
 {
 	const binary_tree_node_t* p = NULL;	//正在访问的节点
@@ -156,7 +158,7 @@ void post_order(const binary_tree_node_t* root, int (*visit)(void*))
 			p = p->lchild;
 		}
 
-		q = NULL;
+		q = NULL;	//用于保存上一次被访问过的节点指针，初始置为NULL
 
 		while(!s.empty())
 		{
@@ -173,10 +175,10 @@ void post_order(const binary_tree_node_t* root, int (*visit)(void*))
 				s.push(p);
 
 				p = p->rchild;	//先处理右子树
-				break;
+				break;			//进入右子树后应该当做一个新的根节点来再次处理，故break
 			}
 		}
-	}while(!s.empty());
+	}while(!s.empty());		//s为空则遍历完毕
 }
 
 ///@brief 层次遍历，即宽度优先遍历(BFS)
@@ -186,7 +188,7 @@ void post_order(const binary_tree_node_t* root, int (*visit)(void*))
 void level_order(const binary_tree_node_t* root, int (*visit)(void*))
 {
 	const binary_tree_node_t* p;
-	queue<const binary_tree_node_t*> q;
+	queue<const binary_tree_node_t*> q;	//同迭代版的先序遍历完全一致，除了把stack换成queue之外
 
 	p = root;
 
