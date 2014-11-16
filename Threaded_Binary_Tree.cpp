@@ -25,6 +25,19 @@ typedef struct tbt_node_t
 	elem_t data; //节点存放的数据
 }tbt_node_t;
 
+/*
+静态成员函数用于访问私有静态成员变量。静态成员函数不依赖于任何对象，故导致：1.其没有this指针；2. 其只能访问静态成员变量，而不能访问其他非静态成员变量。
+因为后者依赖于确定的对象。在使用静态成员函数的时候不需要初始化一个对象，通过对象来调用函数，只需要通过“类名::静态成员函数”就可以调用。另外，虽然通过某一对象
+也能访问静态成员函数，但不推荐这么使用。
+http://www.learncpp.com/cpp-tutorial/812-static-member-functions/
+/////////////////////////////////
+因为《手写代码》中该程序是纯c的代码，并未涉及c++中类的内容。故上述静态成员函数的知识与代码关系不大，属于自学。
+/////////////////////////////////
+*/
+//内部函数
+static void in_thread(tbt_node_t* p, tbt_node_t** pre);
+static tbt_node_t* first(tbt_node_t* p);
+static tbt_node_t* next(const tbt_node_t* p);
 
 int main()
 {
