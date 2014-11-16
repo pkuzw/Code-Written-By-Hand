@@ -11,6 +11,20 @@
 #include <cstddef>	//for NULL
 #include <iostream>
 
+///@brief 节点数据类型
+typedef int elem_t;
+
+///@struct
+///@brief 线索二叉树节点
+typedef struct tbt_node_t
+{
+	int ltag;	//1：表示线索；0：表示孩子
+	int rtag;	//1：表示线索；0：表示孩子
+	tbt_node_t* lchild;	//左孩子指针
+	tbt_node_t* rchild;	//右孩子指针
+	elem_t data; //节点存放的数据
+}tbt_node_t;
+
 
 int main()
 {
