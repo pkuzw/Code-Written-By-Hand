@@ -114,6 +114,12 @@ void pre_order_morris(bt_node_t* root, int (*visit)(elem_t))
 	}
 }
 
+//逆转路径
+static void reverse(bt_node_t* from, bt_node_t* to);
+
+//逆转访问指定节点间的节点
+static void visit_reverse(bt_node_t* from, bt_node_t* to, int (*visit)(elem_t));
+
 ///@brief Morris后序遍历二叉树
 ///@param[in] root 根节点
 ///@param[in] visit 访问节点数据的函数
@@ -126,7 +132,40 @@ void pre_order_morris(bt_node_t* root, int (*visit)(elem_t))
 //          b. 如果前驱节点的右孩子指向当前节点，则断开该指向，即将前驱节点的右孩子指向空指针，然后按照从前驱节点到当前节点的左孩子的顺序输出路径上
 //             的所有节点，并将当前节点更新为当前节点的右孩子，即cur = cur->rchild
 //       4. 重复步骤2和步骤3，直至当前节点为空，即cur = NULL
+void post_order_morris(bt_node_t* root, int (*visit)(elem_t))
+{
+	bt_node_t dump = {0, NULL, NULL};	//临时节点，令其左孩子为根节点
+	dump.lchild = root;
+	bt_node_t *cur = &dump, *pre = NULL;
 
+	while (cur != NULL)
+	{
+		if (cur->lchild == NULL)	//如果当前节点的左孩子为空，则更新当前节点为其右孩子
+		{
+			cur = cur->rchild;
+		}
+		else						//如果当前节点的左孩子非空，则寻找当前节点的前驱节点
+		{
+			pre = cur->lchild;
+			while (pre->rchild != NULL && pre->rchild != cur)
+			{
+				pre = pre->rchild;
+			}
+
+			if (pre->rchild == NULL)//如果前驱节点的右孩子未指向当前节点（线索化），则将前驱的右孩子指向当前节点，并将当前节点移到其左孩子
+			{
+				pre->rchild = cur;
+				cur = cur->lchild;
+			} 
+			else	//如果前驱节点的右孩子指向了当前节点，则反向输出从当前节点的左孩子到前驱节点路径上的所有节点，并清除该指向，让后将当前节点移到右孩子
+			{
+				visit_reverse(cur->lchild, pre, visit);
+				pre->rchild = NULL;
+				cur = cur->rchild;
+			}
+		}
+	}
+}
 
 
 int main()
