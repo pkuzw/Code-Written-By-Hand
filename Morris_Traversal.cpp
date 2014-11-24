@@ -167,8 +167,101 @@ void post_order_morris(bt_node_t* root, int (*visit)(elem_t))
 	}
 }
 
+///@brief 逆转路径
+///@param[in] from 起始节点
+///@param[to] to 终止节点
+///@return 无
+///@note 逆转路径限定在当前节点的左孩子到当前节点的前驱节点之间的路径，这就相当于在二者之间的单向链表
+static void reverse(bt_node_t *from, bt_node_t *to)
+{
+	if (from == to)
+	{
+		return;
+	}
+	bt_node_t *x = from, *y = from->rchild, *z = NULL;
+	while (x != to)
+	{
+		z = y->rchild;	//z后移
+		y->rchild = x;	//why?	这里相当于将y的右孩子转向。
+		x = y;			//x后移
+		y = z;			//y后移
+	}
+}
+
+///@brief 访问逆转后的路径上的所有节点
+///@param[in] from 起始节点
+///@param[in] to 终止节点
+///@return 无
+static void visit_reverse(bt_node_t *from, bt_node_t *to, int (*visit)(elem_t))
+{
+	reverse(from, to);	//先将节点顺序颠倒过来
+
+	bt_node_t *p = to;
+	while(1)
+	{
+		visit(p->data);
+		if (p == from)
+		{
+			break;
+		}
+		p = p->rchild;	//因为前驱节点是左子树的最右下角节点，只需要一直向右下角遍历
+	}
+
+	reverse(to, from);	//再把节点顺序还原
+}
+
+///@brief 分配一个新结点
+///@param[in] data 新结点的数据
+///@return 新结点
+bt_node_t* new_node(int data)
+{
+	bt_node_t* node = (bt_node_t*) malloc(sizeof(bt_node_t));
+	node->data = data;
+	node->lchild = NULL;
+	node->rchild = NULL;
+
+	return node;
+}
+
+///@brief 打印函数
+///@param[in] data 节点的数据
+///@return 返回节点数据
+static int print(const elem_t data)
+{
+	cout << data << ' ';
+	return 0;
+}
 
 int main()
 {
+	/*构造如下二叉树
+		1
+	   / \
+	  2   3
+	 / \ / \
+	4  5 6  7
+	*/
+	bt_node_t *root = new_node(1);
+	root->lchild = new_node(2);
+	root->rchild = new_node(3);
+
+	root->lchild->lchild = new_node(4);
+	root->lchild->rchild = new_node(5);
+
+	root->rchild->lchild = new_node(6);
+	root->rchild->rchild = new_node(7);
+
+	cout << "In order morris: " << endl;
+	in_order_morris(root, print);
+	cout << endl;
+
+	cout << "Pre order morris: " << endl;
+	pre_order_morris(root, print);
+	cout << endl;
+
+	cout << "Post order morris: " << endl;
+	post_order_morris(root, print);
+	cout << endl;
+
 	return 0;
 }
