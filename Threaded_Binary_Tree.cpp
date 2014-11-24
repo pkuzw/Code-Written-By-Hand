@@ -121,7 +121,8 @@ static tbt_node_t* first(tbt_node_t* p)
 static tbt_node_t* next(const tbt_node_t* p)
 {
 	if(p->rtag == 0)	//如果右孩子存在
-		return first(p->rchild);	//why??
+		return first(p->rchild);	//why??	
+									//因为按照中序遍历的定义，对于右子树的遍历应该最先访问的是右子树最左下角节点，即p->rchild的前驱节点
 	else
 		return p->rchild;
 }
