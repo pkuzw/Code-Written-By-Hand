@@ -4,7 +4,7 @@
 ///@version 1.0
 
 #include <iostream>
-#include <cstdlib>
+#include <cstdlib>	//for malloc
 #include <cstring>	//for strchr
 #include <cstddef>
 
@@ -54,6 +54,77 @@ void build_post_test()
 	return;
 }
 
+///@brief 节点数据类型
+///@struct
+typedef char elem_t;
+typedef struct bt_node_t
+{
+	elem_t data;	//节点数据
+	bt_node_t *lchild;	//左孩子
+	bt_node_t *rchild;  //右孩子
+}bt_node_t;
+
+///@brief 给定前序遍历和中序遍历，重建二叉树
+///@param[in] pre 前序遍历序列
+///@param[in] in 中序遍历序列
+///@param[in] n 遍历序列的长度，即二叉树节点数目
+///@param[out] root 重建后的二叉树根节点
+///@return 无
+void rebuild(const char *pre, const char *in, int n, bt_node_t **root)
+{
+	if (n <= 0 || pre == NULL || in == NULL)
+	{
+		return;
+	}
+	//获得前序遍历的第一个节点
+	*root = (bt_node_t *)malloc(sizeof(bt_node_t));	//why root is a pointer of pointer?? 如果改为指针，在测试的时候进入post_order()函数时，root会为空。
+													//但为什么会为空呢？
+	(*root)->data = *pre;
+	(*root)->lchild = NULL;
+	(*root)->rchild = NULL;
+
+	int left_len = strchr(in, pre[0]) - in;	//计算左子树的节点数
+
+	//以下参数都要抛去根节点
+	rebuild(pre + 1, in, left_len, &((*root)->lchild));	//重建左子树， pre + 1是因为第一个是根节点，需要跳过
+
+	rebuild(pre + left_len + 1, in + left_len + 1, n - left_len - 1, &((*root)->rchild));	//重建右子树, in + left + 1是因为中间有一个根节点，需要多加1
+}
+
+
+///@brief 后序遍历二叉树
+///@param[in] root 根节点
+///@return 无
+void post_order(bt_node_t *root)
+{
+	if (root != NULL)
+	{
+		post_order(root->lchild);
+		post_order(root->rchild);
+		cout << root->data;
+	}	
+}
+
+///@brief 测试重建二叉树函数
+///@return 无
+void rebuild_test()
+{
+	char pre[MAX] = {};
+	char in[MAX] = {};
+	bt_node_t *root = NULL;
+
+
+	cout << "Input the pre order sequence: " << endl;
+	cin >> pre;
+	cout << "Input the in order sequence: " << endl;
+	cin >> in;
+
+	rebuild(pre, in, strlen(pre), &root);
+	cout << "Output the post order sequence: " << endl;
+	post_order(root);
+	cout << endl;
+	return;
+}
 
 
 int main()
@@ -69,5 +140,7 @@ int main()
 	post order:	4526731
 	*/
 	build_post_test();
+
+	rebuild_test();
 	return 0;
 }
