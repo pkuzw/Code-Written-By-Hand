@@ -54,6 +54,8 @@ void build_post_test()
 	return;
 }
 
+
+
 int main()
 {
 	/*测试如下二叉树
@@ -62,6 +64,9 @@ int main()
 	  2   3
 	 / \ / \
 	4  5 6  7
+	pre order:	1245367
+	in order:	4251637
+	post order:	4526731
 	*/
 	build_post_test();
 	return 0;
