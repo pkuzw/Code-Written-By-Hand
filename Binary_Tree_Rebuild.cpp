@@ -1,4 +1,4 @@
-///@file ÖØ½¨¶ş²æÊ÷
+ï»¿///@file é‡å»ºäºŒå‰æ ‘
 ///@author zhaowei
 ///@date 2014.11.25
 ///@version 1.0
@@ -8,33 +8,33 @@
 #include <cstring>	//for strchr
 #include <cstddef>
 
-using namespace std;
+using namespace std; 
 
-///@brief ¸ø¶¨Ç°Ğò±éÀúºÍÖĞĞò±éÀú£¬Êä³öºóĞò±éÀú
-///@param[in] pre Ç°Ğò±éÀúµÄĞòÁĞ
-///@param[in] in ÖĞĞò±éÀúµÄĞòÁĞ
-///@param[in] n ĞòÁĞµÄ³¤¶È£¬¼´¶ş²æÊ÷µÄ½ÚµãÊı
-///@param[out] post ºóĞò±éÀúµÄĞòÁĞ
-///@return ÎŞ
-///@note ½â¾öË¼Â·ÊÇ·ÖÖÎ·¨£¬ÀûÓÃÖĞĞò±éÀúÊ±¸ù½ÚµãµÄÎ»ÖÃ£¬½«ÏÈĞò±éÀúĞòÁĞµÄ×ó×ÓÊ÷½ÚµãÏÈµİ¹é´¦Àíµô£¬È»ºóÔÙµİ¹é´¦ÀíÓÒ×ÓÊ÷½Úµã£¬×îºó²¹ÉÏ¸ù½Úµã
+///@brief ç»™å®šå‰åºéå†å’Œä¸­åºéå†ï¼Œè¾“å‡ºååºéå†
+///@param[in] pre å‰åºéå†çš„åºåˆ—
+///@param[in] in ä¸­åºéå†çš„åºåˆ—
+///@param[in] n åºåˆ—çš„é•¿åº¦ï¼Œå³äºŒå‰æ ‘çš„èŠ‚ç‚¹æ•°
+///@param[out] post ååºéå†çš„åºåˆ—
+///@return æ— 
+///@note è§£å†³æ€è·¯æ˜¯åˆ†æ²»æ³•ï¼Œåˆ©ç”¨ä¸­åºéå†æ—¶æ ¹èŠ‚ç‚¹çš„ä½ç½®ï¼Œå°†å…ˆåºéå†åºåˆ—çš„å·¦å­æ ‘èŠ‚ç‚¹å…ˆé€’å½’å¤„ç†æ‰ï¼Œç„¶åå†é€’å½’å¤„ç†å³å­æ ‘èŠ‚ç‚¹ï¼Œæœ€åè¡¥ä¸Šæ ¹èŠ‚ç‚¹
 void build_post(const char *pre, const char *in, const int n, char *post)
 {
 	if (n <= 0)
 	{
 		return;
 	}
-	//¼ÆËã×ó×ÓÊ÷³¤¶È
-	int left_len = strchr(in, pre[0]) - in;	//strchr: ÔÚÖ¸¶¨×Ö·û´®ÖĞÑ°ÕÒÖ¸¶¨×Ö·ûµÚÒ»¸ö´Î³öÏÖµÄÎ»ÖÃ
+	//è®¡ç®—å·¦å­æ ‘é•¿åº¦
+	int left_len = strchr(in, pre[0]) - in;	//strchr: åœ¨æŒ‡å®šå­—ç¬¦ä¸²ä¸­å¯»æ‰¾æŒ‡å®šå­—ç¬¦ç¬¬ä¸€ä¸ªæ¬¡å‡ºç°çš„ä½ç½®
 		
-	build_post(pre + 1, in, left_len, post);//µİ¹é´¦Àí×ó×ÓÊ÷
+	build_post(pre + 1, in, left_len, post);//é€’å½’å¤„ç†å·¦å­æ ‘
 
-	build_post(pre + left_len + 1, in + left_len + 1, n - left_len - 1, post + left_len);//µİ¹é´¦ÀíÓÒ×ÓÊ÷
+	build_post(pre + left_len + 1, in + left_len + 1, n - left_len - 1, post + left_len);//é€’å½’å¤„ç†å³å­æ ‘
 
-	post[n - 1] = pre[0];	//´¦Àí¸ù½Úµã
+	post[n - 1] = pre[0];	//å¤„ç†æ ¹èŠ‚ç‚¹
 }
 
-///@brief ²âÊÔbuild_postº¯Êı
-///@return ÎŞ
+///@brief æµ‹è¯•build_postå‡½æ•°
+///@return æ— 
 #define MAX 128
 void build_post_test()
 {
@@ -56,7 +56,7 @@ void build_post_test()
 
 int main()
 {
-	/*²âÊÔÈçÏÂ¶ş²æÊ÷
+	/*æµ‹è¯•å¦‚ä¸‹äºŒå‰æ ‘
 		1
 	   / \
 	  2   3
