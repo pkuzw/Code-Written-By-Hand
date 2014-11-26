@@ -81,10 +81,7 @@ void rebuild(const char *pre, const char *in, int n, bt_node_t *root)
 	//why root is a pointer of pointer?? 如果改为指针，在测试的时候进入post_order()函数时，root会为空。但为什么会为空呢？
 
 	//2014.11.26
-	//通过查资料和川神讨论，得出的原因是这样的：
-	//1. malloc()是在堆上分配空间，如果使用一级指针*root，在rebuild()函数结束后，一级指针*root作为值传递的函数参数因为在栈空间里，
-	//	 会被释放掉，释放的是一级指针变量root，而不是其指向的堆空间，其指向的堆中内存空间则会变成内存垃圾。如果使用二级指针**root，
-	//	 rebuild()函数在结束时释放的是root二级指针变量，其指向的一级指针*root以及**root所指向的堆空间则被保留下来。
+	//1. 如果使用一级指针root，在函数内部对其进行的赋值实际上只是对root的副本赋值，而不能影响到函数外面的root。
 
 	//2. 堆：用于存储全局变量和静态变量，手动分配和回收（这个代码中没有对malloc()分配的内存进行释放free()操作，是个缺陷，会造成内存
 	//   泄露。注意，free()之后应该将指针置为空，防止它指向不明确的内存空间），速度比较慢，不限制空间（上限是系统分配给进程的内存空间），
@@ -137,7 +134,7 @@ void rebuild_test()
 	char in[MAX] = {};
 	bt_node_t *root = NULL;
 
-
+	
 	cout << "Input the pre order sequence: " << endl;
 	cin >> pre;
 	cout << "Input the in order sequence: " << endl;
@@ -147,6 +144,7 @@ void rebuild_test()
 	cout << "Output the post order sequence: " << endl;
 	post_order(root);
 	cout << endl;
+
 	return;
 }
 
