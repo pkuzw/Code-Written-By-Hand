@@ -88,7 +88,7 @@ void rebuild(const char *pre, const char *in, int n, bt_node_t **root)
 	//	 如果是二级指针root，给root分配空间时的赋值操作
 	//	 *root = (bt_node_t *)malloc(sizeof(bt_node_t));	
 	//   相当与直接对*root所表示的内存空间进行修改，在函数外部也是可见的。
-	//   这就好比函数void foo1(int x){x = y;}和void foo2(int &x){*x = y;}，在foo1中对于x的赋值是对函数内部的x副本进行的，不影响函数
+	//   这就好比函数void foo1(int x){x = y;}和void foo2(int *x){*x = y;}，在foo1中对于x的赋值是对函数内部的x副本进行的，不影响函数
 	//   外面的x；在foo2中，对于*x的赋值是直接在x所表示的内存空间上进行，在函数外部也是可见的。就是这个道理。
 
 	//2. 堆：用于存储全局变量和静态变量，手动分配和回收（这个代码中没有对malloc()分配的内存进行释放free()操作，是个缺陷，会造成内存
@@ -155,6 +155,26 @@ void rebuild_test()
 	return;
 }
 
+///@brief 传值
+void foo1(int x)
+{
+	int y = 3;
+	x = y;
+}
+
+///@brief 传指针
+void foo2(int* x)
+{
+	int y = 3;
+	*x = y;
+}
+
+///@brief 传引用
+void foo3(int x)
+{
+	int y = 3;
+	x = y;
+}
 
 int main()
 {
@@ -171,5 +191,14 @@ int main()
 	build_post_test();
 
 	rebuild_test();
+
+	int x = 10;
+	foo1(x);
+	cout << "after foo1: " << x << endl;
+	foo2(&x);
+	cout << "after foo2: " << x << endl;
+	foo3(x);
+	cout << "after foo3: " << x << endl;
+
 	return 0;
 }
