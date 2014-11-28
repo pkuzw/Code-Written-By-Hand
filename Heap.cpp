@@ -93,6 +93,37 @@ int heap_size(heap_t *h)
 	return h->size;
 }
 
+///@brief 最小堆的自上向下筛选算法
+///@param[in] h 堆对象的指针
+///@param[in] start 开始筛选的节点
+///@return 无
+void heap_sift_down(const heap_t *h, const int start)
+{
+	int i = start;
+	int j = 0;
+	const heap_elem_t tmp = h->elems[start];
+
+	//j = 2 * i + 1适用于根节点标号为0而非1的情形，j表示i的左孩子，j + 1表示右孩子
+	for (j = 2 * i + 1; j < h->size; j = 2 * j + 1)
+	{
+		if (j < (h->size - 1) && 
+			h->cmp(&(h->elems[j]), &(h->elems[j + 1])) > 0) 
+		{
+			j++;	//j指向两子女中较小者
+		}
+		if (h->cmp(&tmp, &(h->elems[j])) <= 0)
+		{
+			break;	//??
+		}
+		else
+		{
+			h->elems[i] = h->elems[j];
+			i = j;
+		}
+	}
+	h->elems[i] = tmp;
+}
+
 int main()
 {
 	return 0;
