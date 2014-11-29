@@ -124,6 +124,68 @@ void heap_sift_down(const heap_t *h, const int start)
 	h->elems[i] = tmp;
 }
 
+///@brief 最小堆自下向上筛选算法
+///@param[in] h 堆对象指针
+///@param[in] start 开始节点
+///@return 无
+void heap_sift_up(const heap_t *h, const int start)	//??
+{
+	int j = start;
+	int i = (j - 1) / 2;
+	const heap_elem_t tmp = h->elems[start];
+	while (j > 0)
+	{
+		if (h->cmp(&(h->elems[i]), &tmp) <= 0)
+		{
+			break;
+		} 
+		else
+		{
+			h->elems[j] = h->elems[i];
+			j = i;
+			i = (i - 1) / 2;
+		}
+		h->elems[j] = tmp;
+	}
+}
+
+///@brief 添加一个元素
+///@param[in] h 堆对象的指针
+///@param[in] x 要添加的元素
+///@return 无
+void heap_push(heap_t *h, const heap_elem_t x)
+{
+	if (h->size == h->capacity)	//如果已分配的内存空间已满，则重新分配内存空间
+	{
+		heap_elem_t *tmp = (heap_elem_t*)realloc(h->elems, h->capacity * 2 * sizeof(heap_elem_t));
+		h->elems = tmp;
+		h->capacity *= 2; 
+	}
+
+	h->elems[h->size] = x;	//插入新元素
+	h->size++;				//调整当前元素数目
+
+	heap_sift_up(h, h->size - 1);	//将新元素sift_up
+}
+
+///@brief 弹出堆顶元素
+///@param[in] h 堆对象指针
+///@return 无
+void heap_pop(heap_t *h)
+{
+	h->elems[0] = h->elems[h->size - 1];	//将最后一个元素放入堆顶
+	h->size--;								//更新堆中当前元素数目
+	heap_sift_down(h, 0);					//维护最小堆
+}
+
+///@brief 获取堆顶元素
+///@param[in] h 堆对象指针
+///@return 堆顶元素
+heap_elem_t heap_top(heap_t *h)
+{
+	return h->elems[0];
+}
+
 int main()
 {
 	return 0;
