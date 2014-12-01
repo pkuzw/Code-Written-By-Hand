@@ -2,10 +2,24 @@
 ///@author zhaowei
 ///@date 2014.11.27
 ///@version 1.0
-///@note 相当于C++中的priority_queue
+/*@note 相当于C++中的priority_queue
+		priority_queue使用时需要包含头文件<queue>，它能够提供类似最大堆的功能，其队首元素就是队列中的最大元素。
+		priority_queue的主要方法有：
+		empty()	Test whether container is empty
+
+		size()	Return size 
+		top()	Access top element 
+		push()	Insert element 
+		emplace() Construct and insert element
+		pop()	Remove top element
+		swap ()	Swap contents
+
+*/
+
 
 #include <cstdlib>	//for malloc() & free()
 #include <cstring>	//for memcpy()
+
 
 using namespace std;
 
@@ -97,6 +111,11 @@ int heap_size(heap_t *h)
 ///@param[in] h 堆对象的指针
 ///@param[in] start 开始筛选的节点
 ///@return 无
+/* @note 堆可以看做是完全二叉树，即每片叶子节点具有相同的深度，每个内部节点的度均为2.
+		 最大堆满足性质：A[parent(i)] >= A[i]；
+		 最小堆满足性质：A[parent(i)] <= A[i]；其中i为存放堆节点的下标
+
+*/
 void heap_sift_down(const heap_t *h, const int start)
 {
 	int i = start;
@@ -111,41 +130,42 @@ void heap_sift_down(const heap_t *h, const int start)
 		{
 			j++;	//j指向两子女中较小者
 		}
-		if (h->cmp(&tmp, &(h->elems[j])) <= 0)
+		if (h->cmp(&tmp, &(h->elems[j])) <= 0)//如果当前节点比其孩子节点小
 		{
-			break;	//??
+			break;	//那么就算找到了当前节点应该放置的位置，跳出循环
 		}
-		else
+		else		//如果当前节点比其孩子节点中较小的节点大
 		{
-			h->elems[i] = h->elems[j];
-			i = j;
+			h->elems[i] = h->elems[j];	//将较小的孩子节点值赋给当前节点
+			i = j;						//并将当前节点更新为较小的孩子节点
 		}
 	}
-	h->elems[i] = tmp;
+	h->elems[i] = tmp;//当循环完毕后，将当前节点的值改为开始的节点值
 }
 
 ///@brief 最小堆自下向上筛选算法
 ///@param[in] h 堆对象指针
 ///@param[in] start 开始节点
 ///@return 无
-void heap_sift_up(const heap_t *h, const int start)	//??
+void heap_sift_up(const heap_t *h, const int start)
 {
-	int j = start;
-	int i = (j - 1) / 2;
+	int j = start;			//起始节点下标
+	int i = (j - 1) / 2;	//起始节点的父节点下标
 	const heap_elem_t tmp = h->elems[start];
 	while (j > 0)
 	{
-		if (h->cmp(&(h->elems[i]), &tmp) <= 0)
+		if (h->cmp(&(h->elems[i]), &tmp) <= 0)	//如果起始节点值不超过父节点值，则说明已满足最小堆性质，跳出循环
 		{
 			break;
 		} 
-		else
+		else	//如果起始节点值大于父节点值
 		{
+			//则将父节点赋给其子节点
 			h->elems[j] = h->elems[i];
 			j = i;
-			i = (i - 1) / 2;
+			i = (i - 1) / 2;	//同时将i更新为父节点的父节点
 		}
-		h->elems[j] = tmp;
+		h->elems[j] = tmp;	//将原先的子节点值赋给父节点
 	}
 }
 
