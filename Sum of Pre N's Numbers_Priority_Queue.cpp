@@ -26,7 +26,7 @@
 using namespace std;
 
 
-#define  MAXN 100000
+#define MAXN 100000
 int N;
 int a[MAXN], b[MAXN];
 
