@@ -57,11 +57,50 @@ int cmp_int(const void *x, const void *y)
 	}
 }
 
+///@brief 重载运算符>
+///@param[in] a 待比较的自定义类型形参a
+///@param[in] b 待比较的自定义类型形参b
+///@return 如果a.sum > b.sum，则返回true；否则返回false
+bool operator>(node_t a, node_t b)
+{
+	if (a.sum > b.sum ) 
+		return true;
+	else
+		return false;
+}
+
 ///@brief 找出前N小的和
 ///@return 无
+///@note C++中的priority_queue默认是最大堆，如果要使用最小堆的话需要写全三个参数，第一个参数是队列元素类型；第二个是用于保存队列
+//		 元素的容器，可以是vector或者deque，但不能是list；第三个就是元素的比较函数，这里需要重载运算符>
 void k_merge()
 {
-	priority_queue<node_t> min_heap;
+	
+	priority_queue< node_t, vector<node_t>, greater<node_t> > min_heap;
+	node_t tmp;
+
+	qsort(a, N, sizeof(int), cmp_int);	//先对子序列排序
+	qsort(b, N, sizeof(int), cmp_int);
+
+	//将最初的N个和入队
+	for (int i = 0; i < N; i++)
+	{
+		tmp.sum = a[i] + b[0];
+		tmp.b = 0;
+		min_heap.push(tmp);	//从队尾入队
+	}
+
+	//选出最小的前N个和
+	for (int i = 0; i < N; i++)
+	{
+		tmp = min_heap.top();
+		min_heap.pop();		//从队首出队
+		cout << tmp.sum << " ";
+
+		tmp.sum = tmp.sum - b[tmp.b] + b[tmp.b + 1];	//得到a[i] + b[j+1]的另一种方式。否则就需要使用更多的空间来存储每一个和的下一个a[i] + b[j+1]
+		tmp.b++;
+		min_heap.push(tmp);
+	}
 }
 
 int main()
