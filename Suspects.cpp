@@ -31,6 +31,8 @@
    4
    1
    1
+
+   本题来自于POJ 1611。提交后Accepted。
 */
 
 #include <iostream>
