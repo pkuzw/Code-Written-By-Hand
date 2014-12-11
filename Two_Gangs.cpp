@@ -34,7 +34,16 @@
    额外附加信息，记录其距离集合根节点的距离。如果询问的两个节点距离其根节点的距离都是奇数或者都是偶数，那么这两个节点在同一个帮派，否
    则，就在不同帮派。因为要用到节点到根节点的距离，所以在实现Find操作时，没有采用压缩路径的算法。
 
-   本题来自于POJ 1703，按照该代码提交后提示Time Limit Exceeded
+   本题来类似于POJ 1703，按照该代码提交后提示Time Limit Exceeded
+
+   该题无法处理如下例子
+   1
+   5 10
+   D 1 5
+   D 2 4
+   D 3 4
+   D 4 5
+   判断“A 1 5”时出错
 */
 
 #include <iostream>
@@ -66,7 +75,7 @@ int ufs_find_naive(const int s[], int x)
 	while (s[x] >= 0)
 	{
 		x = s[x];
-		dist[x] = (dist[x] + dist[s[x]]) % 2;	//??
+		dist[x] = (dist[x] + dist[s[x]]) % 2;	//这里的dist[x]与dist[s[x]]是相同的。得到的结果肯定为0.
 	}
 	return x;
 }
@@ -127,6 +136,7 @@ int main()
 			else if (msg_type == 'D')	//如果两元素不在同一个帮派，则进行合并操作
 			{
 				ufs_union(s, root_x, root_y);
+				//dist[y] = (dist[x] + 1) % 2;
 				dist[root_y] = (dist[x] + dist[y] + 1) % 2;	//??
 			}
 		}
