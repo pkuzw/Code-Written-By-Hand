@@ -1,7 +1,7 @@
 ﻿///@file 两个黑帮
 ///@author zhaowei
 ///@date 2014.12.09
-///@version 1.0
+///@version 2.0
 /* @note
    描述
    Tadu城有两个黑帮帮派，已知有N个黑帮份子，从1到N编号，每人至少属于一个帮派。每个帮派至少有一个人。给你M条信息，有两类信息：
@@ -43,7 +43,7 @@
    D 2 4
    D 3 4
    D 4 5
-   判断“A 1 5”时出错
+   判断“A 1 5”时出错。在version 2.0已经不会出错了，但依旧TLE。
 */
 
 #include <iostream>
@@ -70,14 +70,28 @@ void ufs_init(int s[], int n)
 ///@param[in] s 并查集数组
 ///@param[in] x 待查找元素
 ///@return 返回该元素所在树的树根
-int ufs_find_naive(const int s[], int x)
+int ufs_find(int s[], int x)
 {
+	
 	while (s[x] >= 0)
-	{
+	{	
+		//??
+		dist[x] = (dist[x] + dist[s[x]]) % 2;	//应该先更新dist[x]，后更新x，否则dist[x]始终为0
 		x = s[x];
-		dist[x] = (dist[x] + dist[s[x]]) % 2;	//这里的dist[x]与dist[s[x]]是相同的。得到的结果肯定为0.
 	}
 	return x;
+	
+	/*
+	压缩路径
+	if (s[x] < 0)
+	{
+		return x;
+	}
+	int parent = s[x];
+	s[x] = ufs_find(s, s[x]);
+	dist[x] = (dist[x] + dist[s[x]]) % 2;
+	return s[x];
+	*/
 }
 
 ///@brief Union操作，将root2集合并入root1集合
@@ -114,8 +128,8 @@ int main()
 		while (m--)	//输入m条信息
 		{
 			cin >> msg_type >> x >> y;
-			root_x = ufs_find_naive(s, x);
-			root_y = ufs_find_naive(s, y);
+			root_x = ufs_find(s, x);
+			root_y = ufs_find(s, y);
 
 			if (msg_type == 'A')
 			{
@@ -123,7 +137,7 @@ int main()
 				{
 					if (dist[x] != dist[y])	//如果两元素到根节点的距离不同时为奇数或偶数，则不在同一个帮派
 					{
-						cout << "In different gang." << endl;
+						cout << "In different gangs." << endl;
 					} 
 					else	//否则就在同一个帮派
 					{
@@ -136,8 +150,18 @@ int main()
 			else if (msg_type == 'D')	//如果两元素不在同一个帮派，则进行合并操作
 			{
 				ufs_union(s, root_x, root_y);
-				//dist[y] = (dist[x] + 1) % 2;
-				dist[root_y] = (dist[x] + dist[y] + 1) % 2;	//??
+				dist[root_y] = (dist[x] + dist[y] + 1) % 2;
+				//因为x与y不在同一个帮派，但是合并时是将x和y所在的子树根节点合并在一起。
+				//所以要对root_x和root_y是否在一个帮派里进行讨论，讨论依据就是x和y到root_x和root_y的距离奇偶性。
+				//1. 如果dist[x]和dist[y]均为奇数，那么x与root_x不在同一个帮派，y与root_y不在同一个帮派，
+				//   又因为x与y不在同一个帮派，故root_x与root_y不在同一个帮派，dist[root_y] = 1；
+				//2. 如果dist[x]为奇数，dist[y]为偶数，则x与root_x不在同一个帮派，y与root_y在同一个帮派，因为
+				//   x与y不在同一个帮派，故root_x与root_y在同一个帮派，dist[root_y] = 0；
+				//3. 如果dist[x]为偶数，dist[y]为奇数，则x与root_x在同一个帮派，y与root_y在不同一个帮派，因为
+				//   x与y不在同一个帮派，故root_x与root_y在同一个帮派，dist[root_y] = 0；
+				//4. 如果dist[x]为偶数，dist[y]为偶数，则x与root_x在同一个帮派，y与root_y在同一个帮派，因为
+				//   x与y不在同一个帮派，故root_x与root_y不在同一个帮派，dist[root_y] = 1
+				//所以dist[root_y] = (dist[x] + dist[y] + 1) % 2;
 			}
 		}
 	}
