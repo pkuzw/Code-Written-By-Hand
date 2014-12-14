@@ -47,4 +47,127 @@
 
    用线段树解题，关键是要想清楚每个节点要存哪些信息，以及这些信息如何高效查询和更新。不要一更新就更新到叶子节点，
    那样更新的效率最坏有可能是O(N)。
+
+   本题类似于POJ 3264，能够正确输出，但是TLE。
 */
+
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+
+using namespace std;
+
+#define MAXN 50001	//包含的最多元素数目
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#define left_child(a) ((a) << 1)		//计算完全二叉树中某一节点的左孩子
+#define right_child(a) (((a) << 1) + 1)	//计算完全二叉树中某一节点的右孩子
+
+typedef struct node_t
+{
+	int left, right; //区间的左右边界
+	int max, min;	//区间内的最大值和最小值
+}node_t;
+
+int A[MAXN];	//保存输入的原始数据数组
+
+
+node_t node[MAXN * 4];	//线段树，一棵完全二叉树，节点编号从1开始，层次从1开始，用一维数组存储，看空间约为4N
+
+int minx, maxx;	//查询结果
+
+///@brief 初始化线段树
+///@return 无
+void init()
+{
+	memset(node, 0, sizeof(node));
+}
+
+///@brief 建立线段树
+///@param[in] t 根节点
+///@param[in] l 区间的左边界
+///@param[in] r 区间的右边界
+///@return 无
+void build(int t, int l, int r)
+{
+	node[t].left = l;
+	node[t].right = r;
+
+	if (l == r)	//如果区间内只有一个元素
+	{
+		node[t].max = A[l];
+		node[t].min = A[l];
+		return;
+	}
+	//否则，递归的构建线段树
+	int mid = (l + r) / 2;
+	build(left_child(t), l, mid);	//构建左子树
+	build(right_child(t), mid + 1, r);//构建右子树
+	node[t].max = max(node[left_child(t)].max, node[right_child(t)].max);
+	node[t].min = min(node[left_child(t)].min, node[right_child(t)].min);
+}
+
+///@brief 查询根节点为t，区间为A[l, r]的最大值和最小值
+///@param[in] t 线段树的根节点
+///@param[in] l 查询区间的左边界
+///@param[in] r 查询区间的右边界
+///@return 无
+void query(int t, int l, int r)
+{
+	//如果查询区间正好与线段树该根节点所代表的区间重合，则直接用线段树该节点的最大值和最小值进行比较后决定是否赋值
+	if (node[t].left == l && node[t].right == r)
+	{
+		if (maxx < node[t].max)
+			maxx = node[t].max;
+		if (minx > node[t].min)
+			minx = node[t].min;
+		return;
+	}
+
+	//否则，应该将问题递归的分成三种情况，查询区间在左孩子所代表的区间；查询区间在右孩子所代表的区间以及横跨两个孩子的区间
+	int mid = (node[t].left + node[t].right) / 2;
+	if (l > mid)
+	{
+		query(right_child(t), l, r);
+	}
+	else if (r <= mid)
+	{
+		query(left_child(t), l, r);
+	} 
+	else
+	{
+		query(left_child(t), l, mid);
+		query(right_child(t), mid + 1, r);
+	}
+}
+
+int main()
+{
+	int n = 0;	//元素数目
+	int q = 0;  //查询次数
+
+	//输入数据
+	cin >> n >> q;
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> A[i];
+	}
+
+	init();	//初始化线段树
+
+	//建立以node[1]为根节点，区间为A[1, n]的线段树
+	build(1, 1, n);
+
+	while (q--)
+	{
+		int a = 0, b = 0;	//查询区间
+		cin >> a  >> b;
+		maxx = 0;
+		minx = 1000010;
+		query(1, a, b);		//查询最大值和最小值，保存在全局变量maxx和minx中
+		cout << maxx - minx << endl;
+	}
+	return 0;
+}
+
+
