@@ -107,8 +107,8 @@ void increase(int t, int l, int r, int64_t inc)
 	{
 		seg_tree[L_CHILD(t)].inc += inc;
 		seg_tree[R_CHILD(t)].inc += inc;
-		seg_tree[L_CHILD(t)].sum += inc * (seg_tree[L_CHILD(t)].right - seg_tree[L_CHILD(t)].left + 1);
-		seg_tree[R_CHILD(t)].sum += inc * (seg_tree[R_CHILD(t)].right - seg_tree[R_CHILD(t)].left + 1);
+		seg_tree[L_CHILD(t)].sum += seg_tree[L_CHILD(t)].inc * (seg_tree[L_CHILD(t)].right - seg_tree[L_CHILD(t)].left + 1);
+		seg_tree[R_CHILD(t)].sum += seg_tree[R_CHILD(t)].inc * (seg_tree[R_CHILD(t)].right - seg_tree[R_CHILD(t)].left + 1);
 		seg_tree[t].inc = 0;
 	}
 
@@ -147,8 +147,8 @@ int64_t query(int t, int l, int r)
 	{
 		seg_tree[L_CHILD(t)].inc += seg_tree[t].inc;
 		seg_tree[R_CHILD(t)].inc += seg_tree[t].inc;
-		seg_tree[L_CHILD(t)].sum += seg_tree[t].inc * (seg_tree[L_CHILD(t)].right - seg_tree[L_CHILD(t)].left + 1);
-		seg_tree[R_CHILD(t)].sum += seg_tree[t].inc * (seg_tree[R_CHILD(t)].right - seg_tree[R_CHILD(t)].left + 1);
+		seg_tree[L_CHILD(t)].sum += seg_tree[L_CHILD(t)].inc * (seg_tree[L_CHILD(t)].right - seg_tree[L_CHILD(t)].left + 1);
+		seg_tree[R_CHILD(t)].sum += seg_tree[R_CHILD(t)].inc * (seg_tree[R_CHILD(t)].right - seg_tree[R_CHILD(t)].left + 1);
 		seg_tree[t].inc = 0;
 	}
 
