@@ -53,16 +53,17 @@
    判断一个串是否是另一个串的前缀，这正是Trie 树（即字典树）的用武之地。
 */
 
-#include <iostream>
-#include <cstring>
-#include <cstdlib>
+//#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 using namespace std;
 
 #define MAXN 10000		//输入编码的最大个数
-#define CHAR_COUNT 10	//字符的种类，即单个节点的子树的最大数目
+#define CHAR_COUNT 2	//字符的种类，即单个节点的子树的最大数目
 #define MAX_CODE_LEN 10	//编码的最大长度
-#define MAX_NODE_COUNT (MAXN * MAX_CODE_LEN + 1)	//Trie的最大节点数目
+#define MAX_NODE_COUNT ((1 << (MAX_CODE_LEN + 1)) - 1)	//Trie的最大节点数目
 
 ///@brief Trie节点
 typedef struct trie_node_t
@@ -113,14 +114,14 @@ void trie_tree_clear(trie_tree_t *tree)
 ///@param[in] tree trie树指针
 ///@param[in] word 新插入的字符串
 ///@return 如果插入成功，返回true，否则返回false
-bool trie_tree_insert(trie_tree_t *tree, const string word)
+bool trie_tree_insert(trie_tree_t *tree, const char* word)
 {
 	trie_node_t *p = tree->root;
-	int word_len = word.length();
+	//int word_len = word.length();
 	int index = 0;
-	while(index < word_len)
+	while(*word)
 	{
-		int curword = word[index] - '0';
+		int curword = *word - '0';
 		if (p->next[curword] == NULL)
 		{
 			p->next[curword] = &(tree->nodes[tree->size++]);
@@ -131,7 +132,7 @@ bool trie_tree_insert(trie_tree_t *tree, const string word)
 		{
 			return false;
 		}
-		index++;
+		word++;	//指针下移
 	}
 	p->is_tail = true;	//标记当前串已经到达结尾
 
@@ -145,3 +146,38 @@ bool trie_tree_insert(trie_tree_t *tree, const string word)
 	return true;
 }
 
+int main()
+{
+	int sample_num = 0;
+	char input_code[MAX_CODE_LEN];
+	
+	trie_tree_t *trie = trie_tree_create();
+	bool is_legal = true;
+
+	while (scanf("%s", input_code) != EOF)
+	{				
+		if (strcmp(input_code, "9") == 0)
+		{
+			if (is_legal)
+			{
+				printf("Set %d is immediately decodable\n", ++sample_num);				
+			}
+			else
+			{
+				printf("Set %d is not immediately decodable\n", ++sample_num);
+			}
+			trie_tree_clear(trie);
+			is_legal = true;
+		}
+		else
+		{
+			if (is_legal)
+			{
+				is_legal = trie_tree_insert(trie, input_code);
+			}
+		}
+		//memset(input_code, 0, 15);
+	}
+	trie_tree_delete(trie);
+	return 0;
+}
