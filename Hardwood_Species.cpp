@@ -70,3 +70,119 @@
 
    本题来自POJ 2418
 */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAXN 1000   //NO MORE THAN 1000 TREE SPECIES，如果是10000，会MEMORY LIMIT EXCEEDED
+#define CHAR_COUNT 128 //ASCII编码范围
+#define MAX_WORD_LEN 30 //树名字的最大长度
+#define MAX_NODE_COUNT ((MAXN * MAX_WORD_LEN) + 1) //TRIE中节点数目
+
+///@breif trie树节点定义
+typedef struct trie_node_t
+{
+    trie_node_t *next[CHAR_COUNT];
+    int count;  //该单词出现的次数
+}trie_node_t;
+
+///@brief trie树定义
+typedef struct trie_tree_t
+{
+    trie_node_t *root;
+    int size;
+    trie_node_t nodes[MAX_NODE_COUNT];
+}trie_tree_t;
+
+///@brief 创建trie树
+///@param 无
+///@return 返回创建的trie对象指针
+trie_tree_t* trie_tree_create()
+{
+    trie_tree_t *tree = (trie_tree_t*)malloc(sizeof(trie_tree_t));
+    tree->root = &(tree->nodes[0]);
+    memset(tree->nodes, 0, sizeof(tree->nodes));
+    tree->size = 1;
+    return tree;
+}
+
+///@brief 销毁trie树
+///@param[in] tree trie树指针
+///@return 无
+void trie_tree_destroy(trie_tree_t *tree)
+{
+    free(tree);
+    tree = NULL;
+}
+
+///@brief 将当前trie树中的所有节点信息清空
+///@param[in] tree trie树指针
+///@return 无
+void trie_tree_clear(trie_tree_t *tree)
+{
+    memset(tree->nodes, 0, sizeof(tree->nodes));
+    tree->size = 1;
+}
+
+///@brief 在当前树中插入word字符串
+///@param[in] tree trie树指针
+///@param[in] word 待插入的字符串
+///@return 无
+void trie_tree_insert(trie_tree_t *tree, char *word)
+{
+    trie_node_t *p = tree->root;
+    while (*word)
+    {
+        if (p->next[*word] == NULL)
+        {
+            p->next[*word] = &(tree->nodes[tree->size++]);
+        }
+        p = p->next[*word];
+        word++;
+    }
+    p->count++;
+    return;
+}
+
+int trees_num = 0;  //树木的数目
+
+///@brief 深度优先遍历trie树
+///@param[in] root trie树根节点
+///@return 无
+void dfs_travel(trie_node_t *root)
+{
+    static char word[MAX_WORD_LEN+1];   //中间结果
+    static int pos; //当前位置
+    
+    if (root->count)    //如果count不为0，则肯定找到了一个单词
+    {
+        word[pos] = '\0';
+        printf("%s %0.4f\n", word, ((float)root->count * 100) / trees_num);
+    }
+    for (int i = 0; i < CHAR_COUNT; i++)
+    {
+        if (root->next[i])
+        {
+            word[pos++] = i;
+            dfs_travel(root->next[i]);
+            pos--;
+        }
+    }
+}
+
+int main()
+{
+    char line[MAX_WORD_LEN+1];
+    trie_tree_t *trie_tree = trie_tree_create();
+    
+    while (gets(line))
+    {
+        trie_tree_insert(trie_tree, line);
+        trees_num++;
+    }
+    dfs_travel(trie_tree->root);
+    trie_tree_destroy(trie_tree);
+    
+    return 0;
+}
