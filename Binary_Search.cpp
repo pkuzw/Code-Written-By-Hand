@@ -1,4 +1,4 @@
-///@file ÕÛ°ë²éÕÒ
+ï»¿///@file æŠ˜åŠæŸ¥æ‰¾
 ///@author zhaowei
 ///@date 2014.12.29
 ///@version 1.0
@@ -8,11 +8,11 @@ using namespace std;
 
 typedef unsigned int elem_t;
 
-///@brief ÓĞĞòË³Ğò±íµÄ¶ş·Ö²éÕÒËã·¨
-///@param[in] a ÒÑÅÅºÃĞòµÄÊı×é
-///@param[in] n Êı×éµÄÔªËØ¸öÊı
-///@param[in] x ´ı²éÕÒµÄÔªËØ
-///@return Èç¹ûÊı×éÖĞ´æÔÚ¸ÃÔªËØ£¬Ôò·µ»ØÔªËØÏÂ±ê£»·ñÔò·µ»Ø-1
+///@brief æœ‰åºé¡ºåºè¡¨çš„äºŒåˆ†æŸ¥æ‰¾ç®—æ³•
+///@param[in] a å·²æ’å¥½åºçš„æ•°ç»„
+///@param[in] n æ•°ç»„çš„å…ƒç´ ä¸ªæ•°
+///@param[in] x å¾…æŸ¥æ‰¾çš„å…ƒç´ 
+///@return å¦‚æœæ•°ç»„ä¸­å­˜åœ¨è¯¥å…ƒç´ ï¼Œåˆ™è¿”å›å…ƒç´ ä¸‹æ ‡ï¼›å¦åˆ™è¿”å›-1
 int binary_search(elem_t *a, int b_index, int e_index, const elem_t x)
 {
 	int mid = (e_index + b_index) / 2;
