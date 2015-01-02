@@ -1,4 +1,4 @@
-///@file Ö±½Ó²åÈëÅÅĞò
+ï»¿///@file ç›´æ¥æ’å…¥æ’åº
 ///@author zhaowei
 ///@date 2015.01.02
 ///@version 1.0
@@ -7,58 +7,38 @@
 #include <string>
 using namespace std;
 
-///@brief ½«¸ø¶¨µÄÕûÊıÊı×é½øĞĞ²åÈëÅÅĞò
-///@param[in] arr ´ıÅÅĞòµÄÊı×éÖ¸Õë
-///@param[in] order_type ÉıĞò£ºasc£»½µĞò£ºdes
-///@param[in] p ÅÅĞòµÄÆğÊ¼ÔªËØÏÂ±ê
-///@param[in] q ÅÅĞòµÄÖÕÖ¹ÔªËØÏÂ±ê
-///@return ÎŞ
+///@brief å°†ç»™å®šçš„æ•´æ•°æ•°ç»„è¿›è¡Œæ’å…¥æ’åº
+///@param[in] arr å¾…æ’åºçš„æ•°ç»„æŒ‡é’ˆ
+///@param[in] order_type å‡åºï¼šascï¼›é™åºï¼šdes
+///@param[in] p æ’åºçš„èµ·å§‹å…ƒç´ ä¸‹æ ‡
+///@param[in] q æ’åºçš„ç»ˆæ­¢å…ƒç´ ä¸‹æ ‡
+///@return æ— 
 void insertion_sort(int *arr, const string order_type, int p, int q)
 {
 	if (order_type == "asc")
 	{
-		for (int i = p; i < q; i++)
+		for (int i = p + 1; i <= q; i++)
 		{
-			int tmp = arr[i + 1];
-			for (int j = i + 1; j > p; j--)
+			int tmp = arr[i];
+			int j = 0;
+			for (j = i - 1; j >= p && tmp < arr[j]; j--) //ä¸å¸¦"="ï¼Œæ˜¯ç¨³å®šæ’åºã€‚åœ¨é”®å€¼ç›¸åŒçš„æƒ…å†µä¸‹ï¼ŒåŸæœ¬åœ¨å‰é¢çš„å…ƒç´ åœ¨æ’åºåä»åœ¨å‰é¢
 			{				
-				if (tmp < arr[j - 1])	//²»´ø"="£¬ÊÇÎÈ¶¨ÅÅĞò¡£ÔÚ¼üÖµÏàÍ¬µÄÇé¿öÏÂ£¬Ô­±¾ÔÚÇ°ÃæµÄÔªËØÔÚÅÅĞòºóÈÔÔÚÇ°Ãæ¡£
-				{
-					arr[j] = arr[j - 1];
-					if (j == p + 1)
-					{
-						arr[j - 1] = tmp;
-					}
-				}
-				else
-				{
-					arr[j] = tmp;
-					break;
-				}
+				arr[j + 1] = arr[j];					
 			}			
+			arr[j + 1] = tmp;
 		}
 	}
 	else
 	{
-		for (int i = p; i < q; i++)
+		for (int i = p + 1; i <= q; i++)
 		{
-			int tmp = arr[i + 1];
-			for (int j = i + 1; j > p; j--)
+			int tmp = arr[i];
+			int j = 0;
+			for (j = i - 1; j >= p && tmp > arr[j]; j--) //ä¸å¸¦"="ï¼Œæ˜¯ç¨³å®šæ’åºã€‚åœ¨é”®å€¼ç›¸åŒçš„æƒ…å†µä¸‹ï¼ŒåŸæœ¬åœ¨å‰é¢çš„å…ƒç´ åœ¨æ’åºåä»åœ¨å‰é¢
 			{				
-				if (tmp > arr[j - 1])
-				{
-					arr[j] = arr[j - 1];
-					if (j == p + 1)
-					{
-						arr[j - 1] = tmp;
-					}
-				}
-				else
-				{
-					arr[j] = tmp;
-					break;
-				}
+				arr[j + 1] = arr[j];					
 			}			
+			arr[j + 1] = tmp;
 		}
 	}
 }
