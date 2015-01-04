@@ -1,4 +1,4 @@
-///@brief ¿ìËÙÅÅĞò
+ï»¿///@brief å¿«é€Ÿæ’åº
 ///@author zhaowei
 ///@date 2015.01.04
 ///@version 1.0
@@ -6,10 +6,10 @@
 #include <iostream>
 using namespace std;
 
-///@brief ½»»»Á½¸öÔªËØ
-///@param[in] a ´ı½»»»µÄÔªËØ
-///@param[in] b ´ı½»»»µÄÔªËØ
-///@return ÎŞ
+///@brief äº¤æ¢ä¸¤ä¸ªå…ƒç´ 
+///@param[in] a å¾…äº¤æ¢çš„å…ƒç´ 
+///@param[in] b å¾…äº¤æ¢çš„å…ƒç´ 
+///@return æ— 
 void swap_elem(int &a, int &b)
 {
 	int tmp = a;
@@ -17,14 +17,14 @@ void swap_elem(int &a, int &b)
 	b = tmp;
 }
 
-///@brief ¶ÔÊı×é½øĞĞ»®·Ö£¬½«½ÏĞ¡µÄ»®ÔÚ×ó²à£¬½Ï´óµÄ»®ÔÚÓÒ²à
-///@param[in] arr ´ı»®·ÖµÄÊı×é
-///@param[in] p ´ı»®·ÖÊı×éµÄÆğÊ¼ÏÂ±ê
-///@param[in] r ´ı»®·ÖÊı×éµÄÖÕÖ¹ÏÂ±ê
-///@return ·µ»ØÖĞÖáÖµËùÔÚÏÂ±ê
+///@brief å¯¹æ•°ç»„è¿›è¡Œåˆ’åˆ†ï¼Œå°†è¾ƒå°çš„åˆ’åœ¨å·¦ä¾§ï¼Œè¾ƒå¤§çš„åˆ’åœ¨å³ä¾§
+///@param[in] arr å¾…åˆ’åˆ†çš„æ•°ç»„
+///@param[in] p å¾…åˆ’åˆ†æ•°ç»„çš„èµ·å§‹ä¸‹æ ‡
+///@param[in] r å¾…åˆ’åˆ†æ•°ç»„çš„ç»ˆæ­¢ä¸‹æ ‡
+///@return è¿”å›ä¸­è½´å€¼æ‰€åœ¨ä¸‹æ ‡
 int partition(int* arr, int p, int r)
 {
-	int x = arr[r];	//×÷ÎªÖĞÖáÖµ(pivot_value)
+	int x = arr[r];	//ä½œä¸ºä¸­è½´å€¼(pivot_value)
 	int i = p - 1;
 
 	for (int j = p; j < r; j++)
@@ -32,18 +32,18 @@ int partition(int* arr, int p, int r)
 		if (arr[j] <= x)
 		{
 			i++;
-			swap_elem(arr[i], arr[j]);	//±ÈÖĞÖáÖµĞ¡µÄ¶¼·ÅÔÚÇ°Ãæ
+			swap_elem(arr[i], arr[j]);	//æ¯”ä¸­è½´å€¼å°çš„éƒ½æ”¾åœ¨å‰é¢
 		}
 	}
-	swap_elem(arr[++i], arr[r]);	//·Å»ØÖĞÖáÖµ
+	swap_elem(arr[++i], arr[r]);	//æ”¾å›ä¸­è½´å€¼
 	return i;
 }
 
-///@brief µİ¹é¿ìËÙÅÅĞò
-///@param[in] arr ´ıÅÅĞòµÄÊı×é
-///@param[in] p Êı×éÆğÊ¼ÏÂ±ê
-///@param[in] r Êı×éÖÕÖ¹ÏÂ±ê
-///@return ÎŞ
+///@brief é€’å½’å¿«é€Ÿæ’åº
+///@param[in] arr å¾…æ’åºçš„æ•°ç»„
+///@param[in] p æ•°ç»„èµ·å§‹ä¸‹æ ‡
+///@param[in] r æ•°ç»„ç»ˆæ­¢ä¸‹æ ‡
+///@return æ— 
 void quick_sort(int *arr, int p, int r)
 {
 	if (p < r)
