@@ -1,6 +1,6 @@
-﻿///@file 最小堆的实现
+﻿///@file 最小堆排序
 ///@author zhaowei
-///@date 2014.11.27
+///@date 2015.01.08
 ///@version 1.0
 /*@note 相当于C++中的priority_queue
 		priority_queue使用时需要包含头文件<queue>，它能够提供类似最大堆的功能，其队首元素就是队列中的最大元素。
@@ -19,6 +19,7 @@
 
 #include <cstdlib>	//for malloc() & free()
 #include <cstring>	//for memcpy()
+#include <iostream>
 
 
 using namespace std;
@@ -206,7 +207,58 @@ heap_elem_t heap_top(heap_t *h)
 	return h->elems[0];
 }
 
+///@brief 堆排序
+///@param[in] 元素数组
+///@param[in] p 起始下标
+///@param[in] r 终止下标
+///@return 无
+void heap_sort(int *arr, int p, int r)
+{
+	heap_t *heap = new heap_t;
+	if (heap_init(heap, r - p + 1, cmp_int) == 0)
+	{
+		for (int i = p; i <= r; i++)
+		{
+			heap_push(heap, arr[i]);
+		}
+
+		for (int i = p; i <= r; i++)
+		{
+			arr[i] = heap_top(heap);
+			heap_pop(heap);
+		}
+
+		heap_uninit(heap);
+	}
+	
+	return;
+}
+
 int main()
 {
+	while (1)
+	{
+		cout << "Input the unsorted array's length: ";
+		int len = 0;
+		cin >> len;
+
+		int *arr = new int[len];
+
+		cout << "Input the array: ";
+		for (int i = 0; i < len; i++)
+		{
+			cin >> arr[i];
+		}
+
+		heap_sort(arr, 0, len-1);
+
+		cout << "Output the sorted array: ";
+		for (int i = 0; i < len; i++)
+		{
+			cout << arr[i] << " ";
+		}
+		cout << endl;
+		delete[] arr;
+	}
 	return 0;
 }
