@@ -32,6 +32,34 @@ void print_subset1(vector<string> S, int n, vector<string> P, int cur, int ed)
 	}
 }
 
+///@brief 位向量法
+///@param[in] S 输入集合
+///@param[in] n 集合大小
+///@param[in] B 位向量集合
+///@param[in] cur B的当前位置
+///@return 无
+///@note 开一个位向量B，B[i] = 1表示选择S[i], B[i] = 0表示不选择
+void print_subset2(vector<string> S, int n, int *B, int cur)
+{
+	if (cur == n)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			if (B[i])
+			{
+				cout << S[i] << " ";
+			}			
+		}
+		cout << endl;
+		return;
+	}
+	B[cur] = 1;
+	print_subset2(S, n, B, cur + 1);
+	B[cur] = 0;
+	print_subset2(S, n, B, cur + 1);
+	return;
+}
+
 int main()
 {
 	vector<string> svec, pvec;
@@ -52,7 +80,14 @@ int main()
 	}
 	cout << endl;
 	cout << "---------------------------------------------------------\n";
-	cout << "The subsets are: " << endl;
+	cout << "1. The subsets are: " << endl;
 	print_subset1(svec, cnt, pvec, 0, 0);
+	cout << endl;
+	cout << "---------------------------------------------------------\n";
+	cout << "2. The subsets are: " << endl;
+	int *B = new int[cnt];
+	memset(B, 0, sizeof(int) * cnt);
+	print_subset2(svec, cnt, B, 0);
+	delete[] B;
 	return 0;
 }
