@@ -60,6 +60,25 @@ void print_subset2(vector<string> S, int n, int *B, int cur)
 	return;
 }
 
+///@brief 二进制法
+///@param[in] S 输入集合
+///@param[in] n 集合大小
+///@return 无
+void print_subset3(vector<string> S, int n)
+{
+	for (int i = 1; i < (1 << n); i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if (i & (1 << j))
+			{
+				cout << S[j] << " ";
+			}
+		}
+		cout << endl;
+	}
+	return;
+}
 int main()
 {
 	vector<string> svec, pvec;
@@ -88,6 +107,12 @@ int main()
 	int *B = new int[cnt];
 	memset(B, 0, sizeof(int) * cnt);
 	print_subset2(svec, cnt, B, 0);
+	cout << endl;
+	cout << "---------------------------------------------------------\n";
+	cout << "3. The subsets are: " << endl;
+	print_subset3(svec, cnt);
+
 	delete[] B;
+
 	return 0;
 }
